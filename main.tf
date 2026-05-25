@@ -45,7 +45,7 @@ resource "aws_security_group" "web_sg" {
 resource "aws_instance" "mywebserver" {
   ami                    = "ami-0e12ffc2dd465f6e4"
   instance_type          = "t3.micro"
-  key_pair               = "mynewkey"
+  key_name               = "mynewkey"
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   tags = {

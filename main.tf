@@ -19,7 +19,7 @@ resource "aws_instance" "mywebserver" {
     ami = "ami-0e12ffc2dd465f6e4"
     instance_type = "t3.micro"
 
-    ingress { 
+ingress { 
         from_port = 80
         to_port = 80
         protocol = "tcp"

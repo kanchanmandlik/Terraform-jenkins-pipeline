@@ -12,18 +12,16 @@ provider "aws" {
   region = var.region
 }
 
-}
-
-# EC2 Instance
 resource "aws_instance" "mywebserver" {
-  ami                    = "ami-0e12ffc2dd465f6e4"
-  instance_type          = "t3.micro"
-  key_name               = "mynewkey"
-  vpc_security_group_ids = [vpc_security_group_ids = ["sg-05699f7bb60e9f9e0"]]
+  ami           = "ami-0e12ffc2dd465f6e4"
+  instance_type = "t3.micro"
+
+  key_name = "terraform-key"
+
+  vpc_security_group_ids = ["sg-05699f7bb60e9f9e0"]
 
   tags = {
     Name = "sample-server"
   }
 }
-
 

@@ -50,10 +50,5 @@ resource "aws_instance" "mywebserver" {
   tags = {
     Name = "sample-server"
   }
-}
 
-# Output Public IP
-output "aws_instance-public_ip" {
-  value = aws_instance.mywebserver.public_ip
-}
 

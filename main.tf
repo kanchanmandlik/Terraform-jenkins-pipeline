@@ -50,5 +50,6 @@ resource "aws_instance" "mywebserver" {
   tags = {
     Name = "sample-server"
   }
+}
 
 

@@ -14,11 +14,6 @@ provider "aws" {
 # Check existing EC2 instances
 data "aws_instances" "existing" {
 
- count = length(data.aws_instances.existing.ids) > 0 ? 1 : 0
-
-  instance_id = data.aws_instances.existing.ids[0]
-}
-
   filter {
     name   = "tag:Name"
     values = ["sample-server"]
@@ -28,6 +23,14 @@ data "aws_instances" "existing" {
     name   = "instance-state-name"
     values = ["pending", "running", "stopped"]
   }
+}
+
+# Get existing instance details
+data "aws_instance" "existing_server" {
+
+  count = length(data.aws_instances.existing.ids) > 0 ? 1 : 0
+
+  instance_id = data.aws_instances.existing.ids[0]
 }
 
 # Fetch latest Amazon Linux 2 AMI
@@ -42,7 +45,7 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# Create EC2 only if no existing instance found
+# Create EC2 only if no instance exists
 resource "aws_instance" "mywebserver" {
 
   count = length(data.aws_instances.existing.ids) == 0 ? 1 : 0

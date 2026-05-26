@@ -3,5 +3,5 @@ output "instance_id" {
 }
 
 output "public_ip" {
-  value = length(data.aws_instances.existing.ids) > 0 ? "Using Existing Server" : aws_instance.mywebserver[0].public_ip
+  value = length(data.aws_instances.existing.ids) > 0 ? data.aws_instance.existing_server[0].public_ip : aws_instance.mywebserver[0].public_ip
 }

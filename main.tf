@@ -14,6 +14,11 @@ provider "aws" {
 # Check existing EC2 instances
 data "aws_instances" "existing" {
 
+ count = length(data.aws_instances.existing.ids) > 0 ? 1 : 0
+
+  instance_id = data.aws_instances.existing.ids[0]
+}
+
   filter {
     name   = "tag:Name"
     values = ["sample-server"]

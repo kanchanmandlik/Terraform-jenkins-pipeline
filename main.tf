@@ -1,4 +1,3 @@
-
 terraform {
   required_providers {
     aws = {
@@ -9,7 +8,21 @@ terraform {
 }
 
 provider "aws" {
-  region = var.region
+  region = "ap-south-1"
+}
+
+# Check existing EC2 instances
+data "aws_instances" "existing" {
+
+  filter {
+    name   = "tag:Name"
+    values = ["sample-server"]
+  }
+
+  filter {
+    name   = "instance-state-name"
+    values = ["pending", "running", "stopped"]
+  }
 }
 
 # Fetch latest Amazon Linux 2 AMI
@@ -22,15 +35,12 @@ data "aws_ami" "amazon_linux" {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
 }
 
-# Create EC2 Instance
+# Create EC2 only if no existing instance found
 resource "aws_instance" "mywebserver" {
+
+  count = length(data.aws_instances.existing.ids) == 0 ? 1 : 0
 
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"

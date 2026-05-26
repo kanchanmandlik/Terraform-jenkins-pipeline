@@ -1,3 +1,7 @@
-output "aws_instance-public_ip" {
-    value = aws_instance.mywebserver.public_ip
+# Output existing or new instance ID
+output "instance_id" {
+
+  value = length(data.aws_instances.existing.ids) > 0 ?
+    data.aws_instances.existing.ids[0] :
+    aws_instance.mywebserver[0].id
 }

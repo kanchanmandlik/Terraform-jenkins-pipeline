@@ -1,5 +1,5 @@
 
-terraform {
+tterraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -12,16 +12,28 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_instance" "mywebserver" {
-  ami           = "ami-0e12ffc2dd465f6e4"
-  instance_type = "t3.micro"
+# Fetch latest Amazon Linux 2 AMI
+data "aws_ami" "amazon_linux" {
 
-data "aws_instance" "foobar"{
-    filter {
-        tags   = "ami-0e12ffc2dd465f6e4"
-        values = ["foobar"]
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
-    most_recent = true
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+# Create EC2 Instance
+resource "aws_instance" "mywebserver" {
+
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t3.micro"
 
   key_name = "mynewkey"
 
@@ -31,4 +43,3 @@ data "aws_instance" "foobar"{
     Name = "sample-server"
   }
 }
-
